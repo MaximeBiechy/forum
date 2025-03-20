@@ -26,12 +26,12 @@ const handleLogout = () => {
       <v-list>
         <v-list-item v-if="!isAuthenticated">
           <v-list-item-title>
-            <NuxtLink to="/login">Se connecter</NuxtLink>
+            <NuxtLink to="/auth/login">Se connecter</NuxtLink>
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="!isAuthenticated">
           <v-list-item-title>
-            <NuxtLink to="/register">S'inscrire</NuxtLink>
+            <NuxtLink to="/auth/register">S'inscrire</NuxtLink>
           </v-list-item-title>
         </v-list-item>
         <v-list-item v-if="isAuthenticated" @click="handleLogout">
