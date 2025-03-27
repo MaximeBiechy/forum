@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const fields = ref([
-  {label: 'Nom', type: 'text', model: 'name'},
   {label: 'Email', type: 'email', model: 'email'},
   {label: 'Mot de passe', type: 'password', model: 'password'},
 ]);
