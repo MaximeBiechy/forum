@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import {ref} from 'vue';
+import {useUserStore} from "~/stores/userStore";
 
-const isAuthenticated = ref(false);
+const userStore = useUserStore();
 const userMenu = ref(false);
+const router = useRouter();
 
 const handleLogout = () => {
-  // TODO: Implement logout
+  userStore.logout();
+  router.push('/');
 }
 </script>
 
@@ -14,27 +17,27 @@ const handleLogout = () => {
     <v-toolbar-title class="mr-auto">
       <NuxtLink to="/">Forum</NuxtLink>
     </v-toolbar-title>
-    <v-btn text>Menu 1</v-btn>
-    <v-btn text>Menu 2</v-btn>
+    <v-btn>Menu 1</v-btn>
+    <v-btn>Menu 2</v-btn>
     <v-spacer></v-spacer>
     <v-menu v-model="userMenu" offset-y>
-      <template v-slot:activator="{ isActive, props, on }">
-        <v-btn icon v-bind="props" v-on="on">
+      <template v-slot:activator="{ props }">
+        <v-btn icon v-bind="props">
           <v-icon>mdi-account</v-icon>
         </v-btn>
       </template>
       <v-list>
-        <v-list-item v-if="!isAuthenticated">
+        <v-list-item v-if="!userStore.isAuthenticated">
           <v-list-item-title>
             <NuxtLink to="/auth/login">Se connecter</NuxtLink>
           </v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="!isAuthenticated">
+        <v-list-item v-if="!userStore.isAuthenticated">
           <v-list-item-title>
             <NuxtLink to="/auth/register">S'inscrire</NuxtLink>
           </v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="isAuthenticated" @click="handleLogout">
+        <v-list-item v-if="userStore.isAuthenticated" @click="handleLogout">
           <v-list-item-title>
             Se déconnecter
           </v-list-item-title>

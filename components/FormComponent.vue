@@ -40,7 +40,8 @@ const handleSubmit = (event: Event) => {
                   v-model="formData[field.model]"
                   :label="field.label"
                   :type="field.type"
-                  outlined
+                  :autocomplete="field.type === 'password' ? 'current-password' : 'off'"
+                  variant="outlined"
                   dense
                   class="form-field"
               />
