@@ -62,11 +62,11 @@ watch(() => props.isVisible, (newVal) => {
 }
 
 .toast.error {
-  background-color: #f87171;
+  background-color: var(--color-error);
 }
 
 .toast.success {
-  background-color: #007B30;
+  background-color: var(--color-success);
 }
 
 .toast_icon {

@@ -1,14 +1,14 @@
 import '@mdi/font/css/materialdesignicons.css'
-
 import 'vuetify/styles'
 import {createVuetify} from 'vuetify'
-import {colors} from '~/constants/colors';
+import {colors} from "~/constants/colors";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     theme: {
+      defaultTheme: 'dark',
       themes: {
-        light: {
+        dark: {
           colors: {
             primary: colors.primary,
             secondary: colors.secondary,

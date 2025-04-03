@@ -34,4 +34,7 @@ export default defineNuxtConfig({
             await initializeDatabase();
         },
     },
+    css: [
+        '~/assets/style/style.css'
+    ],
 });
