@@ -51,6 +51,7 @@ const handleLogout = () => {
 .v-toolbar-title {
   font-size: 24px;
   font-weight: bold;
+  color: var(--color-primary);
 }
 
 a {

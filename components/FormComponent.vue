@@ -47,7 +47,9 @@ const handleSubmit = (event: Event) => {
               />
             </v-row>
           </v-col>
-          <v-btn type="submit" color="primary" class="form-submit-btn" block>Submit</v-btn>
+          <v-btn type="submit" class="form-submit-btn" block>
+            {{ title }}
+          </v-btn>
         </v-form>
       </v-card-text>
     </v-card>
@@ -60,7 +62,7 @@ const handleSubmit = (event: Event) => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--color-surface);
 }
 
 .form-card {
@@ -87,5 +89,8 @@ const handleSubmit = (event: Event) => {
 
 .form-submit-btn {
   margin-top: 20px;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: bold;
 }
 </style>
