@@ -149,7 +149,7 @@ const createForum = async (forum: Forum) => {
       </v-col>
     </v-row>
     <!--   PAGINATION  -->
-    <v-row v-if="!loading" justify="center" class="mt-4">
+    <v-row v-if="!loading && forums.length > 0" justify="center" class="mt-4">
       <v-btn
           :disabled="currentPage === 1"
           @click="goToPage(currentPage - 1)"
