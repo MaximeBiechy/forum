@@ -15,10 +15,11 @@ const handleLogout = () => {
 <template>
   <v-app-bar app>
     <v-toolbar-title class="mr-auto">
-      <NuxtLink to="/">Forum</NuxtLink>
+      <NuxtLink to="/">The Forum</NuxtLink>
     </v-toolbar-title>
-    <v-btn>Menu 1</v-btn>
-    <v-btn>Menu 2</v-btn>
+    <!-- Menus éventuels -->
+    <v-btn></v-btn>
+    <v-btn></v-btn>
     <v-spacer></v-spacer>
     <v-menu v-model="userMenu" offset-y>
       <template v-slot:activator="{ props }">
