@@ -29,6 +29,10 @@ const props = defineProps({
     type: Function,
     required: false,
   },
+  pointer: {
+    type: Boolean,
+    default: true,
+  }
 });
 
 const handleClick = () => {
@@ -39,7 +43,8 @@ const handleClick = () => {
 </script>
 
 <template>
-  <v-col cols="12" md="6" lg="12" class="card cursor-pointer" @click="handleClick">
+  <v-col cols="12" md="6" lg="12" class="card" :class="{ 'cursor-pointer': pointer }"
+         @click="handleClick">
     <v-card-title class="card-title">{{ title }}</v-card-title>
     <v-row class="d-flex pl-3">
       <v-col class="d-flex align-center pt-0">
