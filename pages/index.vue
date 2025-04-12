@@ -143,6 +143,7 @@ const createForum = async (forum: Forum) => {
         :count="forum.topic_count"
         count-label=" sujet(s)"
         @click="() => router.push(`/forums/${forum.id}`)"
+        :isForum="true"
     />
     <PaginationComponent
         v-if="forums.length > 0"

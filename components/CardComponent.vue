@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {useUserStore} from "~/stores/userStore";
+
 const props = defineProps({
   title: {
     type: String,
@@ -41,26 +43,32 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isForum: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+const userStore = useUserStore();
+
+const editedTitle = ref(props.title);
+const isEditing = ref(false);
 const handleClick = () => {
-  if (props.onClick) {
+  if (props.onClick && !isEditing.value) {
     props.onClick();
   }
 };
 
 const emit = defineEmits(['save']);
 
-const isEditing = ref(false);
-const editedTitle = ref(props.title);
 
 const startEditing = () => {
   isEditing.value = true;
 };
 
 const saveEdit = () => {
-  isEditing.value = false;
   emit('save', editedTitle.value);
+  isEditing.value = false;
 };
 
 const cancelEdit = () => {
@@ -90,7 +98,7 @@ const cancelEdit = () => {
           </v-card-title>
         </v-col>
         <v-col cols="auto">
-          <v-row v-if="isOwner" class="mr-2">
+          <v-row v-if="isOwner || (userStore.role === 'admin' && !props.isForum)" class="mr-2">
             <v-icon color="primary" class="mr-2" @click.stop="startEditing">mdi-pencil</v-icon>
             <v-icon color="error" @click.stop="$emit('delete')">mdi-delete</v-icon>
           </v-row>

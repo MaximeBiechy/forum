@@ -12,9 +12,24 @@ export default defineWrappedResponseHandler(async (event) => {
     }
 
     try {
-        await db.query(`DELETE FROM messages WHERE id = ?`, [messageId]);
+        const [message] = await db.query('SELECT topic_id FROM messages WHERE id = ?', [messageId]);
+        if (message.length === 0) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Message introuvable',
+            });
+        }
 
-        return {success: true};
+        const topicId = message[0].topic_id;
+
+        await db.query('DELETE FROM messages WHERE id = ?', [messageId]);
+
+        const [remainingMessages] = await db.query('SELECT COUNT(*) as count FROM messages WHERE topic_id = ?', [topicId]);
+        if (remainingMessages[0].count === 0) {
+            await db.query('DELETE FROM topics WHERE id = ?', [topicId]);
+        }
+
+        return {success: true, message: 'Message supprimé avec succès.'};
     } catch (error: any) {
         throw createError({
             statusCode: 500,

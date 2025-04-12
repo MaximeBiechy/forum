@@ -34,6 +34,8 @@ const fetchMessages = async () => {
       messages.value = response.messages;
       totalPages.value = response.totalPages;
       loading.value = false;
+    } else {
+      await router.push('/')
     }
   } catch (error: any) {
     if (error.statusCode === 404) {

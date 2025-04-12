@@ -86,6 +86,48 @@ const createTopic = async () => {
   }
 };
 
+const deleteTopic = async (topicId: number) => {
+  try {
+    const response: any = await $fetch(`/api/forums/${forumId}/topics/${topicId}`, {
+      method: 'DELETE',
+    });
+
+    if (response.success) {
+      userStore.showSuccessToast('Sujet supprimé avec succès.');
+      await fetchTopics();
+    } else {
+      userStore.showErrorToast('Erreur lors de la suppression du sujet.');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la suppression du sujet :', error);
+    userStore.showErrorToast('Erreur lors de la suppression du sujet.');
+  }
+};
+
+const editTopic = async (topicId: number, newTitle: string) => {
+  if (!newTitle.trim()) {
+    userStore.showErrorToast('Le titre ne peut pas être vide.');
+    return;
+  }
+
+  try {
+    const response: any = await $fetch(`/api/forums/${forumId}/topics/${topicId}`, {
+      method: 'PUT',
+      body: {title: newTitle},
+    });
+
+    if (response.success) {
+      userStore.showSuccessToast('Sujet modifié avec succès.');
+      await fetchTopics();
+    } else {
+      userStore.showErrorToast('Erreur lors de la modification du sujet.');
+    }
+  } catch (error) {
+    console.error('Erreur lors de la modification du sujet :', error);
+    userStore.showErrorToast('Erreur lors de la modification du sujet.');
+  }
+};
+
 onMounted(fetchTopics);
 </script>
 
@@ -142,6 +184,8 @@ onMounted(fetchTopics);
         :count="topic.message_count"
         count-label="message(s)"
         @click="() => router.push({ path: `/forums/${forumId}/topics/${topic.id}` })"
+        @delete="deleteTopic(topic.id)"
+        @save="(newTitle) => editTopic(topic.id, newTitle)"
     />
     <PaginationComponent
         v-if="topics.length > 0"
