@@ -148,34 +148,11 @@ const createForum = async (forum: Forum) => {
         </v-row>
       </v-col>
     </v-row>
-    <!--   PAGINATION  -->
-    <v-row v-if="!loading && forums.length > 0" justify="center" class="mt-4">
-      <v-btn
-          :disabled="currentPage === 1"
-          @click="goToPage(currentPage - 1)"
-          color="primary"
-          outlined
-      >
-        Précédent
-      </v-btn>
-      <v-btn
-          v-for="page in totalPages"
-          :key="page"
-          :color="page === currentPage ? 'primary' : 'default'"
-          @click="goToPage(page)"
-          class="mx-1"
-      >
-        {{ page }}
-      </v-btn>
-      <v-btn
-          :disabled="currentPage === totalPages"
-          @click="goToPage(currentPage + 1)"
-          color="primary"
-          outlined
-      >
-        Suivant
-      </v-btn>
-    </v-row>
+    <PaginationComponent
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        @pageChange="goToPage"
+    />
   </v-container>
 </template>
 
