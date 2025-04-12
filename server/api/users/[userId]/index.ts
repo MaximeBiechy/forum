@@ -3,7 +3,7 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql
 
-    const user_id = event.context.params?.id;
+    const user_id = event.context.params?.userId;
 
     if (!user_id) {
         throw createError({
