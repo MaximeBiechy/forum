@@ -7,10 +7,16 @@ const userStore = useUserStore();
 <template>
   <v-app>
     <HeaderComponent/>
-    <v-main>
+    <v-main class="margin-bottom">
       <NuxtPage/>
     </v-main>
-    <ToastComponent :message="userStore.toastSuccessMessage" type="error" :isVisible="userStore.isSuccessVisible"/>
+    <ToastComponent :message="userStore.toastSuccessMessage" type="success" :isVisible="userStore.isSuccessVisible"/>
     <ToastComponent :message="userStore.toastErrorMessage" type="error" :isVisible="userStore.isErrorVisible"/>
   </v-app>
 </template>
+
+<style>
+.margin-bottom {
+  margin-bottom: 5vh;
+}
+</style>

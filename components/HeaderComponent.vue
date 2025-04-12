@@ -23,7 +23,10 @@ const handleLogout = () => {
     <v-menu v-model="userMenu" offset-y>
       <template v-slot:activator="{ props }">
         <v-btn icon v-bind="props">
-          <v-icon>mdi-account</v-icon>
+          <v-avatar v-if="userStore.isAuthenticated" size="32">
+            <img :src="`/assets/avatars/${userStore.avatar_image_name}`" alt="Avatar utilisateur" style="width: 32px; height: 32px;">
+          </v-avatar>
+          <img v-else :src="`/assets/avatars/default_avatar.png`" alt="Avatar utilisateur" style="width: 32px; height: 32px;">
         </v-btn>
       </template>
       <v-list>

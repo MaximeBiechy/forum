@@ -55,7 +55,11 @@ export default defineWrappedResponseHandler(async (event: any) => {
         await validatePassword(password, user.password);
         const token = generateToken(user);
 
-        return {success: true, token, user: {id: user.id, email: user.email}};
+        return {
+            success: true,
+            token,
+            user: {id: user.id, email: user.email, avatar_image_name: user.avatar_image_name}
+        };
     } catch (error: any) {
         throw createError({
             statusCode: error.statusCode || 500,

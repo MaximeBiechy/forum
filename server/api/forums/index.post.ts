@@ -16,7 +16,7 @@ export default defineWrappedResponseHandler(async (event) => {
         const results = await db.query('INSERT INTO forums (title, created_by) VALUES (?, ?)', [title, created_by]);
         const insertId = results[0].insertId;
         const newForum = await db.query('SELECT * FROM forums WHERE id = ?', [insertId]);
-        return newForum[0][0];
+        return {success: true, forum: newForum[0]};
     } catch (error: any) {
         throw createError({
             statusCode: 500,

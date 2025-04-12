@@ -25,7 +25,7 @@ export default defineWrappedResponseHandler(async (event) => {
             })
         }
 
-        return rows[0][0];
+        return {success: true, user: rows[0][0]};
 
     } catch (error: any) {
         throw createError({

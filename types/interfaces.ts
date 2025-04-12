@@ -2,6 +2,7 @@ export interface User {
     id: number;
     email: string;
     password: string;
+    avatar_image_name: string;
     role: 'user' | 'admin';
     created_at: Date;
 }

@@ -2,7 +2,9 @@ import {defineStore} from 'pinia';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
+        id: '',
         email: '',
+        avatar_image_name: '',
         isAuthenticated: false,
         isErrorVisible: ref(false),
         isSuccessVisible: ref(false),
@@ -56,7 +58,9 @@ export const useUserStore = defineStore('user', {
                 }
             });
             if (response.success) {
-                this.email = user.email;
+                this.id = response.user.id;
+                this.email = response.user.email;
+                this.avatar_image_name = response.user.avatar_image_name;
                 this.isAuthenticated = true;
             } else {
                 const message = response.err?.message || 'Erreur lors de la connexion';
@@ -64,7 +68,9 @@ export const useUserStore = defineStore('user', {
             }
         },
         logout() {
+            this.id = '';
             this.email = '';
+            this.avatar_image_name = '';
             this.isAuthenticated = false;
         },
     },
