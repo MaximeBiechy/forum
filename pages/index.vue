@@ -131,7 +131,7 @@ const createForum = async (forum: Forum) => {
       <v-col v-for="forum in forums" :key="forum.id" cols="12" md="6" lg="12" class="forum-card cursor-pointer"
              @click="() => router.push(`/forums/${forum.id}`)">
         <v-card-title class="card-title">{{ forum.title }}</v-card-title>
-        <v-row class="d-flex no-gutters">
+        <v-row class="d-flex pl-3">
           <v-col class="d-flex align-center pt-0">
             <v-avatar v-if="forum.user" size="32">
               <img :src="`/assets/avatars/${forum.user.avatar_image_name}`" alt="Avatar utilisateur"
