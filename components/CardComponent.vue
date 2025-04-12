@@ -83,7 +83,20 @@ const cancelEdit = () => {
       <v-btn color="secondary" class="mt-2" @click="cancelEdit">Annuler</v-btn>
     </div>
     <div v-else>
-      <v-card-title class="card-title">{{ title }}</v-card-title>
+      <v-row class="d-flex align-center" justify="space-between">
+        <v-col cols="auto" class="flex-grow-1">
+          <v-card-title class="card-title">
+            {{ title }}
+          </v-card-title>
+        </v-col>
+        <v-col cols="auto">
+          <v-row v-if="isOwner" class="mr-2">
+            <v-icon color="primary" class="mr-2" @click.stop="startEditing">mdi-pencil</v-icon>
+            <v-icon color="error" @click.stop="$emit('delete')">mdi-delete</v-icon>
+          </v-row>
+        </v-col>
+      </v-row>
+
       <v-row class="d-flex pl-3">
         <v-col class="d-flex align-center pt-0">
           <v-avatar v-if="avatar" size="32">
@@ -97,10 +110,6 @@ const cancelEdit = () => {
         <v-card-subtitle v-if="count !== undefined" class="count">
           {{ count }} {{ countLabel }}
         </v-card-subtitle>
-      </v-row>
-      <v-row v-if="isOwner" class="mt-2">
-        <v-btn color="primary" @click="startEditing">Modifier</v-btn>
-        <v-btn color="error" @click="$emit('delete')">Supprimer</v-btn>
       </v-row>
     </div>
   </v-col>
@@ -118,7 +127,11 @@ const cancelEdit = () => {
   font-size: 20px;
   font-weight: bold;
   color: var(--color-onPrimary);
+  white-space: normal; /* permet le retour à la ligne */
+  word-break: break-word; /* casse les mots trop longs si nécessaire */
+  line-height: 1.4; /* améliore la lisibilité si plusieurs lignes */
 }
+
 
 .subtitle {
   font-size: 14px;

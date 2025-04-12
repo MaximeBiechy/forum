@@ -95,7 +95,7 @@ onMounted(fetchTopics);
       <v-btn @click="router.push('/')" color="secondary" class="mb-4">
         Retour aux forums
       </v-btn>
-      <v-btn v-if="!showForm" @click="toggleForm" color="primary">
+      <v-btn v-if="!showForm && userStore.isAuthenticated" @click="toggleForm" color="primary">
         Créer un sujet
       </v-btn>
     </v-row>

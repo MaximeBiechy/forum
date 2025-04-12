@@ -29,6 +29,7 @@ export default defineWrappedResponseHandler(async (event) => {
             SELECT topics.*,
                    users.email                           AS author_email,
                    users.avatar_image_name               AS author_avatar,
+                   (SELECT COUNT(*) FROM messages WHERE messages.topic_id = topics.id) AS message_count,
                    (SELECT MAX(messages.created_at)
                     FROM messages
                     WHERE messages.topic_id = topics.id) AS last_message_date,

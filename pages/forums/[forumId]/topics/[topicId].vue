@@ -170,7 +170,7 @@ onMounted(fetchMessages);
       </v-col>
 
       <v-col cols="12" md="4" class="reply-form d-none d-md-block">
-        <v-row v-if="userStore.isAuthenticated">
+        <v-row>
           <v-textarea v-model="newMessageContent" label="Votre réponse" outlined dense/>
           <v-btn @click="postMessage" color="primary" block>Répondre</v-btn>
         </v-row>
