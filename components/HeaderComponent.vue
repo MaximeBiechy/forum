@@ -18,8 +18,8 @@ const handleLogout = () => {
       <NuxtLink to="/">The Forum</NuxtLink>
     </v-toolbar-title>
     <!-- Menus éventuels -->
-    <v-btn></v-btn>
-    <v-btn></v-btn>
+    <!-- <v-btn></v-btn> -->
+    <!-- <v-btn></v-btn> -->
     <v-spacer></v-spacer>
     <v-menu v-model="userMenu" offset-y>
       <template v-slot:activator="{ props }">
