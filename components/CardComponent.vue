@@ -32,7 +32,15 @@ const props = defineProps({
   pointer: {
     type: Boolean,
     default: true,
-  }
+  },
+  isMessage: {
+    type: Boolean,
+    default: false,
+  },
+  isOwner: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const handleClick = () => {
@@ -59,6 +67,10 @@ const handleClick = () => {
       <v-card-subtitle v-if="count !== undefined" class="count">
         {{ count }} {{ countLabel }}
       </v-card-subtitle>
+    </v-row>
+    <v-row v-if="isOwner" class="mt-2">
+      <v-btn color="primary" @click="$emit('edit')">Modifier</v-btn>
+      <v-btn color="error" @click="$emit('delete')">Supprimer</v-btn>
     </v-row>
   </v-col>
 </template>

@@ -17,6 +17,14 @@ export default defineWrappedResponseHandler(async (event) => {
     const offset = (page - 1) * limit;
 
     try {
+        const [forumExists] = await db.query('SELECT id FROM forums WHERE id = ?', [forumId]);
+        if (forumExists.length === 0) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Forum introuvable',
+            });
+        }
+
         const [rows] = await db.query(`
             SELECT topics.*,
                    users.email                           AS author_email,

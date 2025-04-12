@@ -27,13 +27,19 @@ const fetchTopics = async () => {
       },
     });
 
+
     if (response.success) {
+      loading.value = false;
       topics.value = response.topics;
       totalPages.value = response.totalPages;
-      loading.value = false;
     }
-  } catch (error) {
-    console.error('Erreur lors de la récupération des sujets :', error);
+  } catch (error: any) {
+    if (error.statusCode === 404) {
+      userStore.showErrorToast('Forum introuvable.');
+      await router.push('/');
+    } else {
+      console.error('Erreur lors de la récupération des sujets :', error);
+    }
   }
 };
 const goToPage = (page: number) => {
@@ -58,10 +64,9 @@ const createTopic = async () => {
   }
 
   try {
-    const response: any = await $fetch('/api/forums', {
+    const response: any = await $fetch(`/api/forums/${forumId}`, {
       method: 'POST',
       body: {
-        forum_id: forumId,
         title: newTopicTitle.value,
         message: newTopicMessage.value,
         user_id: userStore.id,
@@ -131,7 +136,7 @@ onMounted(fetchTopics);
         v-for="topic in topics"
         :key="topic.id"
         :title="topic.title"
-        :subtitle="`Dernier message par ${topic.last_message_author.split('@')[0]}`"
+        :subtitle="`Dernier message par ${topic.last_message_author?.split('@')[0]}`"
         :avatar="`/assets/avatars/${topic.author_avatar}`"
         :date="formatDate(topic.last_message_date, false)"
         :count="topic.message_count"

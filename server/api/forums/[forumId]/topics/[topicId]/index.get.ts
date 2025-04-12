@@ -13,10 +13,18 @@ export default defineWrappedResponseHandler(async (event) => {
 
     const query = getQuery(event);
     const page = parseInt(query.page as string) || 1;
-    const limit = 20;
+    const limit = parseInt(query.limit as string) || 20;
     const offset = (page - 1) * limit;
 
     try {
+        const [topicExists] = await db.query('SELECT id FROM topics WHERE id = ?', [topicId]);
+        if (topicExists.length === 0) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Topic introuvable',
+            });
+        }
+
         const [rows] = await db.query(`
             SELECT messages.*, users.email AS author_email, users.avatar_image_name AS author_avatar
             FROM messages

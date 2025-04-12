@@ -25,6 +25,7 @@ const fetchMessages = async () => {
       method: 'GET',
       params: {
         page: currentPage.value,
+        limit: itemsPerPage,
       },
     });
 
@@ -33,8 +34,13 @@ const fetchMessages = async () => {
       totalPages.value = response.totalPages;
       loading.value = false;
     }
-  } catch (error) {
-    console.error('Erreur lors de la récupération des messages :', error);
+  } catch (error: any) {
+    if (error.statusCode === 404) {
+      userStore.showErrorToast('Topic introuvable.');
+      await router.push('/');
+    } else {
+      console.error('Erreur lors de la récupération des messages :', error);
+    }
   }
 };
 
@@ -45,7 +51,7 @@ const goToPage = (page: number) => {
   }
 };
 
-const createMessage = async () => {
+const postMessage = async () => {
   if (!userStore.isAuthenticated) {
     userStore.showErrorToast('Vous devez être connecté pour répondre.');
     return;
@@ -57,7 +63,7 @@ const createMessage = async () => {
   }
 
   try {
-    const response: any = await $fetch('/api/messages', {
+    const response: any = await $fetch(`/api/forums/${forumId}/topics/${topicId}`, {
       method: 'POST',
       body: {
         topic_id: topicId,
@@ -129,69 +135,91 @@ onMounted(fetchMessages);
         Retour au forum
       </v-btn>
     </v-row>
-    <v-col cols="8" class="message-list">
-      <LoaderComponent v-if="loading"/>
-      <v-row v-else>
-        <CardComponent
-            v-for="message in messages"
-            :key="message.id"
-            :title="message.content"
-            :subtitle="message.author_email.split('@')[0]"
-            :date="formatDate(message.created_at, false)"
-            :avatar="`/assets/avatars/${message.author_avatar}`"
-        >
-          <template #default>
-            <p class="content">{{ message.content }}</p>
-          </template>
-          <template #actions>
-            <v-row
-                v-if="userStore.isAuthenticated && (userStore.id === message.user_id || userStore.role === 'admin')"
+    <v-row class="content-row" justify="center" align="start">
+      <v-col cols="12" md="8" lg="8" class="d-flex">
+        <v-col cols="12" class="message-list">
+          <LoaderComponent v-if="loading"/>
+          <v-row v-else>
+            <CardComponent
+                v-for="message in messages"
+                :key="message.id"
+                :title="message.content"
+                :subtitle="message.author_email?.split('@')[0]"
+                :date="formatDate(message.created_at, false)"
+                :avatar="`/assets/avatars/${message.author_avatar}`"
+                :pointer="false"
+                :isMessage="true"
+                :isOwner="userStore.id === message.user_id"
+                @edit="editMessage(message.id)"
+                @delete="deleteMessage(message.id)"
             >
-              <v-btn
-                  @click="() => { editingMessageId = message.id; editingMessageContent = message.content; }"
-                  color="primary"
-              >
-                Modifier
-              </v-btn>
-              <v-btn
-                  v-if="userStore.role === 'admin'"
-                  @click="deleteMessage(message.id)"
-                  color="error"
-              >
-                Supprimer
-              </v-btn>
-            </v-row>
-          </template>
-        </CardComponent>
-      </v-row>
-      <PaginationComponent
-          v-if="messages.length > 0"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          @pageChange="goToPage"
-      />
-    </v-col>
-    <v-col cols="3" class="reply-form">
-      <v-row v-if="userStore.isAuthenticated">
-        <v-textarea v-model="newMessageContent" label="Votre réponse" outlined dense/>
-        <v-btn @click="createMessage" color="primary" block>Répondre</v-btn>
-      </v-row>
-    </v-col>
+              <template #default>
+                <p class="content">{{ message.content }}</p>
+              </template>
+              <template #actions>
+                <v-row
+                    v-if="userStore.isAuthenticated && (userStore.id === message.user_id || userStore.role === 'admin')"
+                >
+                  <v-btn
+                      @click="() => { editingMessageId = message.id; editingMessageContent = message.content; }"
+                      color="primary"
+                  >
+                    Modifier
+                  </v-btn>
+                  <v-btn
+                      v-if="userStore.role === 'admin'"
+                      @click="deleteMessage(message.id)"
+                      color="error"
+                  >
+                    Supprimer
+                  </v-btn>
+                </v-row>
+              </template>
+            </CardComponent>
+          </v-row>
+          <PaginationComponent
+              v-if="messages.length > 0"
+              :current-page="currentPage"
+              :total-pages="totalPages"
+              @pageChange="goToPage"
+          />
+        </v-col>
+      </v-col>
+
+      <!-- Formulaire à droite -->
+      <v-col cols="12" md="4" class="reply-form d-none d-md-block">
+        <v-row v-if="userStore.isAuthenticated">
+          <v-textarea v-model="newMessageContent" label="Votre réponse" outlined dense/>
+          <v-btn @click="postMessage" color="primary" block>Répondre</v-btn>
+        </v-row>
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 <style scoped>
-.message-list {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content-row {
   margin-top: 20px;
+}
+
+.message-list {
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
 }
 
 .reply-form {
   background-color: var(--color-surface);
   border-radius: 10px;
   padding: 20px;
+  position: sticky;
+  top: 100px;
 }
 
-.reply-form v-textarea {
-  margin-bottom: 10px;
-}
 </style>

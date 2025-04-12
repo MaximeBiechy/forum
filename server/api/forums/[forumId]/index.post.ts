@@ -2,7 +2,8 @@ import {defineWrappedResponseHandler} from "~/server/utils/mysql";
 
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
-    const {forum_id, title, message, user_id} = await readBody(event);
+    const forum_id = event.context.params?.forumId;
+    const {title, message, user_id} = await readBody(event);
 
     if (!title || !message) {
         throw createError({
