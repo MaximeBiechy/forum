@@ -17,6 +17,9 @@ const handleLogout = () => {
     <v-toolbar-title class="mr-auto">
       <NuxtLink to="/">The Forum</NuxtLink>
     </v-toolbar-title>
+    <v-btn>
+      <NuxtLink to="/">Accueil</NuxtLink>
+    </v-btn>
     <v-btn v-if="userStore.isAuthenticated && userStore.role === 'admin'">
       <NuxtLink to="/admin">Admin</NuxtLink>
     </v-btn>
