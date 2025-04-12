@@ -2,8 +2,9 @@ import {defineStore} from 'pinia';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        id: '',
+        id: null,
         email: '',
+        role: '',
         avatar_image_name: '',
         isAuthenticated: false,
         isErrorVisible: ref(false),
@@ -60,6 +61,7 @@ export const useUserStore = defineStore('user', {
             if (response.success) {
                 this.id = response.user.id;
                 this.email = response.user.email;
+                this.role = response.user.role;
                 this.avatar_image_name = response.user.avatar_image_name;
                 this.isAuthenticated = true;
             } else {
@@ -68,8 +70,9 @@ export const useUserStore = defineStore('user', {
             }
         },
         logout() {
-            this.id = '';
+            this.id = null;
             this.email = '';
+            this.role = '';
             this.avatar_image_name = '';
             this.isAuthenticated = false;
         },

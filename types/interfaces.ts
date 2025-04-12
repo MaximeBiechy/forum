@@ -33,6 +33,8 @@ export interface Message {
     id: number;
     topic_id: number;
     user_id: number;
+    author_avatar: string;
+    author_email: string;
     content: string;
     created_at: Date;
 }

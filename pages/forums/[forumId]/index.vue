@@ -15,11 +15,11 @@ const itemsPerPage = 20;
 const showForm = ref(false);
 
 const route = useRoute();
-const forumId = route.params.id;
+const forumId = route.params.forumId;
 
 const fetchTopics = async () => {
   try {
-    const response: any = await $fetch(`/api/topics/${forumId}`, {
+    const response: any = await $fetch(`/api/forums/${forumId}`, {
       method: 'GET',
       params: {
         page: currentPage.value,
@@ -58,7 +58,7 @@ const createTopic = async () => {
   }
 
   try {
-    const response: any = await $fetch('/api/topics', {
+    const response: any = await $fetch('/api/forums', {
       method: 'POST',
       body: {
         forum_id: forumId,
@@ -95,7 +95,7 @@ onMounted(fetchTopics);
       </v-btn>
     </v-row>
     <v-row v-if="showForm" class="create-topic-form-wrapper" justify="center">
-      <v-col cols="12" md="8" lg="6" class="create-topic-form">
+      <v-col cols="12" class="create-topic-form">
         <v-text-field
             v-model="newTopicTitle"
             label="Titre du sujet"
@@ -110,37 +110,34 @@ onMounted(fetchTopics);
             dense
             hide-details
         />
-        <div class="form-actions">
+        <v-row class="form-actions mt-1" align="center" justify="center">
           <v-btn @click="toggleForm" color="secondary">
             Annuler
           </v-btn>
           <v-btn @click="createTopic" color="primary">
             Créer un sujet
           </v-btn>
-        </div>
+        </v-row>
       </v-col>
     </v-row>
     <LoaderComponent v-if="loading"/>
     <v-row v-else-if="topics.length === 0" justify="center" class="empty-message">
       <v-col cols="12" md="8" lg="6" class="text-center">
         <v-icon color="primary" size="48">mdi-comment-question-outline</v-icon>
-        <p class="empty-text">Aucun sujet pour le moment. Soyez le premier à en créer un !</p>
+        <p class="empty-text">Aucun sujet pour le moment. Soyez le premier à en créer un!</p>
       </v-col>
     </v-row>
-    <v-row v-else class="card-container">
-      <CardComponent
-          v-for="topic in topics"
-          :key="topic.id"
-          :title="topic.title"
-          :subtitle="`Dernier message par ${topic.last_message_author.split('@')[0]}`"
-          :avatar="`/assets/avatars/${topic.author_avatar}`"
-          :date="formatDate(topic.last_message_date, false)"
-          :count="topic.message_count"
-          count-label="message(s)"
-          @click="() => router.push(`/messages/${topic.id}`)"
-          class="topic-card"
-      />
-    </v-row>
+    <CardComponent
+        v-for="topic in topics"
+        :key="topic.id"
+        :title="topic.title"
+        :subtitle="`Dernier message par ${topic.last_message_author.split('@')[0]}`"
+        :avatar="`/assets/avatars/${topic.author_avatar}`"
+        :date="formatDate(topic.last_message_date, false)"
+        :count="topic.message_count"
+        count-label="message(s)"
+        @click="() => router.push({ path: `/forums/${forumId}/topics/${topic.id}` })"
+    />
     <PaginationComponent
         v-if="topics.length > 0"
         :current-page="currentPage"
@@ -151,7 +148,7 @@ onMounted(fetchTopics);
 </template>
 
 <style scoped>
-.card-container {
+.container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -170,12 +167,12 @@ onMounted(fetchTopics);
 
 .form-actions {
   display: flex;
-  justify-content: space-evenly;
+  gap: 10px;
 }
 
 .create-topic-form-wrapper {
-  max-width: 800px;
   margin: 20px auto 0;
+  width: 100%;
 }
 
 .create-topic-form {

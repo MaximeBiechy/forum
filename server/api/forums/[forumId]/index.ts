@@ -19,16 +19,16 @@ export default defineWrappedResponseHandler(async (event) => {
     try {
         const [rows] = await db.query(`
             SELECT topics.*,
-                   users.email                                                                         AS author_email,
-                   users.avatar_image_name                                                             AS author_avatar,
+                   users.email                           AS author_email,
+                   users.avatar_image_name               AS author_avatar,
                    (SELECT MAX(messages.created_at)
                     FROM messages
-                    WHERE messages.topic_id = topics.id)                                               AS last_message_date,
+                    WHERE messages.topic_id = topics.id) AS last_message_date,
                    (SELECT users.email
                     FROM messages
                              JOIN users ON messages.user_id = users.id
                     WHERE messages.topic_id = topics.id
-                    ORDER BY messages.created_at DESC                                                     LIMIT 1) AS last_message_author
+                    ORDER BY messages.created_at DESC       LIMIT 1) AS last_message_author
             FROM topics
                 JOIN users
             ON topics.user_id = users.id

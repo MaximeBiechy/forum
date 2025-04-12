@@ -133,20 +133,17 @@ const createForum = async (forum: Forum) => {
         <p class="empty-text">Aucun forum pour le moment. Soyez le premier à en créer un!</p>
       </v-col>
     </v-row>
-    <v-row v-else class="card-container">
-      <CardComponent
-          v-for="forum in forums"
-          :key="forum.id"
-          :title="forum.title"
-          :subtitle="forum.user.email.split('@')[0]"
-          :avatar="`/assets/avatars/${forum.user.avatar_image_name}`"
-          :date="formatDate(forum.created_at, false)"
-          :count="forum.topic_count"
-          count-label=" sujet(s)"
-          @click="() => router.push(`/forums/${forum.id}`)"
-          class="forum-card"
-      />
-    </v-row>
+    <CardComponent
+        v-for="forum in forums"
+        :key="forum.id"
+        :title="forum.title"
+        :subtitle="forum.user.email.split('@')[0]"
+        :avatar="`/assets/avatars/${forum.user.avatar_image_name}`"
+        :date="formatDate(forum.created_at, false)"
+        :count="forum.topic_count"
+        count-label=" sujet(s)"
+        @click="() => router.push(`/forums/${forum.id}`)"
+    />
     <PaginationComponent
         v-if="forums.length > 0"
         :current-page="currentPage"
@@ -172,38 +169,5 @@ const createForum = async (forum: Forum) => {
   padding: 10px;
   width: 100%;
   margin: 20px 0;
-}
-
-.card-container {
-  width: 100%;
-  margin-top: 20px;
-}
-
-.forum-card {
-  background-color: var(--color-surface);
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px 0;
-}
-
-.card-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--color-onPrimary);
-}
-
-.user-name {
-  font-weight: bold;
-  color: var(--color-onPrimary);
-}
-
-.created-text {
-  color: var(--color-onSecondary);
-}
-
-.topic-count {
-  font-size: 14px;
-  color: var(--color-onSecondary);
-  margin-top: 5px;
 }
 </style>

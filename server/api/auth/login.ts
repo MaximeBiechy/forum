@@ -58,7 +58,7 @@ export default defineWrappedResponseHandler(async (event: any) => {
         return {
             success: true,
             token,
-            user: {id: user.id, email: user.email, avatar_image_name: user.avatar_image_name}
+            user: {id: user.id, email: user.email, avatar_image_name: user.avatar_image_name, role: user.role}
         };
     } catch (error: any) {
         throw createError({
