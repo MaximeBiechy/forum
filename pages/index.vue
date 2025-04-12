@@ -127,28 +127,28 @@ const createForum = async (forum: Forum) => {
       </v-col>
     </v-row>
     <LoaderComponent v-if="loading"/>
-    <v-row v-else class="card-container">
-      <v-col v-for="forum in forums" :key="forum.id" cols="12" md="6" lg="12" class="forum-card cursor-pointer"
-             @click="() => router.push(`/forums/${forum.id}`)">
-        <v-card-title class="card-title">{{ forum.title }}</v-card-title>
-        <v-row class="d-flex pl-3">
-          <v-col class="d-flex align-center pt-0">
-            <v-avatar v-if="forum.user" size="32">
-              <img :src="`/assets/avatars/${forum.user.avatar_image_name}`" alt="Avatar utilisateur"
-                   style="width: 32px; height: 32px;"/>
-            </v-avatar>
-            <v-col class="d-flex flex-column pl-0">
-              <v-card-subtitle class="user-name">{{ forum.user?.email.split('@')[0] }}</v-card-subtitle>
-              <v-card-subtitle class="created-text">{{
-                  formatDate(forum.created_at, false)
-                }}
-              </v-card-subtitle>
-            </v-col>
-          </v-col>
-        </v-row>
+    <v-row v-else-if="forums.length === 0" justify="center" class="empty-message">
+      <v-col cols="12" md="8" lg="6" class="text-center">
+        <v-icon color="primary" size="48">mdi-comment-question-outline</v-icon>
+        <p class="empty-text">Aucun forum pour le moment. Soyez le premier à en créer un!</p>
       </v-col>
     </v-row>
+    <v-row v-else class="card-container">
+      <CardComponent
+          v-for="forum in forums"
+          :key="forum.id"
+          :title="forum.title"
+          :subtitle="forum.user.email.split('@')[0]"
+          :avatar="`/assets/avatars/${forum.user.avatar_image_name}`"
+          :date="formatDate(forum.created_at, false)"
+          :count="forum.topic_count"
+          count-label=" sujet(s)"
+          @click="() => router.push(`/forums/${forum.id}`)"
+          class="forum-card"
+      />
+    </v-row>
     <PaginationComponent
+        v-if="forums.length > 0"
         :current-page="currentPage"
         :total-pages="totalPages"
         @pageChange="goToPage"
@@ -199,5 +199,11 @@ const createForum = async (forum: Forum) => {
 
 .created-text {
   color: var(--color-onSecondary);
+}
+
+.topic-count {
+  font-size: 14px;
+  color: var(--color-onSecondary);
+  margin-top: 5px;
 }
 </style>

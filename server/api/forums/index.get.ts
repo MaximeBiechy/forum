@@ -11,7 +11,8 @@ export default defineWrappedResponseHandler(async (event) => {
 
     try {
         const [rows] = await db.query(`
-            SELECT *
+            SELECT forums.*,
+                   (SELECT COUNT(*) FROM topics WHERE topics.forum_id = forums.id) AS topic_count
             FROM forums
             ORDER BY created_at ${order}
             LIMIT ?
