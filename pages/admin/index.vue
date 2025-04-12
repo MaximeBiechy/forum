@@ -121,7 +121,7 @@ onMounted(fetchForums);
     <v-row v-else-if="forums.length === 0" justify="center" class="empty-message">
       <v-col cols="12" md="8" lg="6" class="text-center">
         <v-icon color="primary" size="48">mdi-comment-question-outline</v-icon>
-        <p class="empty-text">Aucun forum pour le moment. Créez-en un !</p>
+        <p class="empty-text">Aucun forum pour le moment.</p>
       </v-col>
     </v-row>
     <CardComponent
