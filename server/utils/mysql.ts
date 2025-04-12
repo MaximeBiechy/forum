@@ -3,6 +3,7 @@ import bluebird from 'bluebird'
 import type {EventHandler, EventHandlerRequest} from 'h3'
 import fs from 'fs/promises';
 import path from 'path';
+import bcrypt from "bcrypt";
 
 export async function initializeDatabase() {
   try {
@@ -24,6 +25,21 @@ export async function initializeDatabase() {
     }
 
     console.log("Schéma MySQL initialisé");
+
+    const [rows] = await connection.query('SELECT id FROM users WHERE role = ? LIMIT 1', ['admin']);
+    if (rows.length === 0) {
+      const email = 'admin';
+      const password = 'admin';
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      await connection.query(
+          'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
+          [email, hashedPassword, 'admin']
+      );
+      console.log("Utilisateur admin par défaut créé avec succès.");
+    } else {
+      console.log("Un utilisateur admin existe déjà.");
+    }
 
     await connection.end();
   } catch (err) {
