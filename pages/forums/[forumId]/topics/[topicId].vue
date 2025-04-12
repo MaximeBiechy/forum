@@ -19,6 +19,7 @@ const itemsPerPage = 20;
 
 const topicId = route.params.topicId;
 const forumId = route.params.forumId;
+
 const fetchMessages = async () => {
   try {
     const response: any = await $fetch(`/api/forums/${forumId}/topics/${topicId}`, {
@@ -83,32 +84,6 @@ const postMessage = async () => {
   }
 };
 
-const editMessage = async (messageId: number) => {
-  if (!editingMessageContent.value.trim()) {
-    userStore.showErrorToast('Le message ne peut pas être vide.');
-    return;
-  }
-
-  try {
-    const response: any = await $fetch(`/api/messages/${messageId}`, {
-      method: 'PUT',
-      body: {
-        content: editingMessageContent.value,
-      },
-    });
-
-    if (response.success) {
-      editingMessageId.value = null;
-      editingMessageContent.value = '';
-      userStore.showSuccessToast('Message modifié avec succès.');
-      await fetchMessages();
-    }
-  } catch (error) {
-    console.error('Erreur lors de la modification du message :', error);
-    userStore.showErrorToast('Erreur lors de la modification du message.');
-  }
-};
-
 const deleteMessage = async (messageId: number) => {
   try {
     const response: any = await $fetch(`/api/messages/${messageId}`, {
@@ -122,6 +97,37 @@ const deleteMessage = async (messageId: number) => {
   } catch (error) {
     console.error('Erreur lors de la suppression du message :', error);
     userStore.showErrorToast('Erreur lors de la suppression du message.');
+  }
+};
+
+const startEditingMessage = (messageId: number, content: string) => {
+  editingMessageId.value = messageId;
+  editingMessageContent.value = content;
+};
+
+const editMessage = async (messageId: number, newContent: string) => {
+  if (!newContent.trim()) {
+    userStore.showErrorToast('Le message ne peut pas être vide.');
+    return;
+  }
+
+  try {
+    const response: any = await $fetch(`/api/messages/${messageId}`, {
+      method: 'PUT',
+      body: {
+        content: newContent,
+      },
+    });
+
+    if (response.success) {
+      editingMessageId.value = null;
+      editingMessageContent.value = '';
+      userStore.showSuccessToast('Message modifié avec succès.');
+      await fetchMessages();
+    }
+  } catch (error) {
+    console.error('Erreur lors de la modification du message :', error);
+    userStore.showErrorToast('Erreur lors de la modification du message.');
   }
 };
 
@@ -150,32 +156,9 @@ onMounted(fetchMessages);
                 :pointer="false"
                 :isMessage="true"
                 :isOwner="userStore.id === message.user_id"
-                @edit="editMessage(message.id)"
+                @save="(newContent) => editMessage(message.id, newContent)"
                 @delete="deleteMessage(message.id)"
-            >
-              <template #default>
-                <p class="content">{{ message.content }}</p>
-              </template>
-              <template #actions>
-                <v-row
-                    v-if="userStore.isAuthenticated && (userStore.id === message.user_id || userStore.role === 'admin')"
-                >
-                  <v-btn
-                      @click="() => { editingMessageId = message.id; editingMessageContent = message.content; }"
-                      color="primary"
-                  >
-                    Modifier
-                  </v-btn>
-                  <v-btn
-                      v-if="userStore.role === 'admin'"
-                      @click="deleteMessage(message.id)"
-                      color="error"
-                  >
-                    Supprimer
-                  </v-btn>
-                </v-row>
-              </template>
-            </CardComponent>
+            />
           </v-row>
           <PaginationComponent
               v-if="messages.length > 0"
@@ -186,7 +169,6 @@ onMounted(fetchMessages);
         </v-col>
       </v-col>
 
-      <!-- Formulaire à droite -->
       <v-col cols="12" md="4" class="reply-form d-none d-md-block">
         <v-row v-if="userStore.isAuthenticated">
           <v-textarea v-model="newMessageContent" label="Votre réponse" outlined dense/>
@@ -194,7 +176,6 @@ onMounted(fetchMessages);
         </v-row>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 

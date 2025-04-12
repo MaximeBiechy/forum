@@ -48,30 +48,61 @@ const handleClick = () => {
     props.onClick();
   }
 };
+
+const emit = defineEmits(['save']);
+
+const isEditing = ref(false);
+const editedTitle = ref(props.title);
+
+const startEditing = () => {
+  isEditing.value = true;
+};
+
+const saveEdit = () => {
+  isEditing.value = false;
+  emit('save', editedTitle.value);
+};
+
+const cancelEdit = () => {
+  isEditing.value = false;
+  editedTitle.value = props.title;
+};
 </script>
 
 <template>
   <v-col cols="12" md="6" lg="12" class="card" :class="{ 'cursor-pointer': pointer }"
          @click="handleClick">
-    <v-card-title class="card-title">{{ title }}</v-card-title>
-    <v-row class="d-flex pl-3">
-      <v-col class="d-flex align-center pt-0">
-        <v-avatar v-if="avatar" size="32">
-          <img :src="avatar" alt="Avatar" style="width: 32px; height: 32px;" />
-        </v-avatar>
-        <v-col class="d-flex flex-column pl-0">
-          <v-card-subtitle class="subtitle">{{ subtitle }}</v-card-subtitle>
-          <v-card-subtitle class="date">{{ date }}</v-card-subtitle>
+    <div v-if="isEditing">
+      <v-text-field
+          v-model="editedTitle"
+          label="Modifier le titre"
+          outlined
+          dense
+      />
+      <v-btn color="primary" class="mt-2" @click="saveEdit">Enregistrer</v-btn>
+      <v-btn color="secondary" class="mt-2" @click="cancelEdit">Annuler</v-btn>
+    </div>
+    <div v-else>
+      <v-card-title class="card-title">{{ title }}</v-card-title>
+      <v-row class="d-flex pl-3">
+        <v-col class="d-flex align-center pt-0">
+          <v-avatar v-if="avatar" size="32">
+            <img :src="avatar" alt="Avatar" style="width: 32px; height: 32px;"/>
+          </v-avatar>
+          <v-col class="d-flex flex-column pl-0">
+            <v-card-subtitle class="subtitle">{{ subtitle }}</v-card-subtitle>
+            <v-card-subtitle class="date">{{ date }}</v-card-subtitle>
+          </v-col>
         </v-col>
-      </v-col>
-      <v-card-subtitle v-if="count !== undefined" class="count">
-        {{ count }} {{ countLabel }}
-      </v-card-subtitle>
-    </v-row>
-    <v-row v-if="isOwner" class="mt-2">
-      <v-btn color="primary" @click="$emit('edit')">Modifier</v-btn>
-      <v-btn color="error" @click="$emit('delete')">Supprimer</v-btn>
-    </v-row>
+        <v-card-subtitle v-if="count !== undefined" class="count">
+          {{ count }} {{ countLabel }}
+        </v-card-subtitle>
+      </v-row>
+      <v-row v-if="isOwner" class="mt-2">
+        <v-btn color="primary" @click="startEditing">Modifier</v-btn>
+        <v-btn color="error" @click="$emit('delete')">Supprimer</v-btn>
+      </v-row>
+    </div>
   </v-col>
 </template>
 
