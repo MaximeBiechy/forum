@@ -41,6 +41,11 @@ const handleLogout = () => {
             <NuxtLink to="/auth/register">S'inscrire</NuxtLink>
           </v-list-item-title>
         </v-list-item>
+        <v-list-item v-if="userStore.isAuthenticated">
+          <v-list-item-title>
+            <NuxtLink to="/auth/editProfil">Modifier le profile</NuxtLink>
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item v-if="userStore.isAuthenticated" @click="handleLogout">
           <v-list-item-title>
             Se déconnecter
