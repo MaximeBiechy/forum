@@ -45,8 +45,8 @@ const fetchMessages = async () => {
     });
 
     if (response.success) {
-      messages.value = response.messages;
-      totalPages.value = response.totalPages;
+      messages.value = response.messages || [];
+      totalPages.value = response.totalPages || 1;
       loading.value = false;
     } else {
       await router.push('/')
@@ -92,7 +92,6 @@ const postMessage = async () => {
     if (response.success) {
       newMessageContent.value = '';
       userStore.showSuccessToast('Message posté avec succès.');
-      await fetchMessages();
     }
   } catch (error) {
     console.error('Erreur lors de la création du message :', error);
@@ -108,7 +107,6 @@ const deleteMessage = async (messageId: number) => {
 
     if (response.success) {
       userStore.showSuccessToast('Message supprimé avec succès.');
-      await fetchMessages();
     }
   } catch (error) {
     console.error('Erreur lors de la suppression du message :', error);
@@ -139,7 +137,6 @@ const editMessage = async (messageId: number, newContent: string) => {
       editingMessageId.value = null;
       editingMessageContent.value = '';
       userStore.showSuccessToast('Message modifié avec succès.');
-      await fetchMessages();
     }
   } catch (error) {
     console.error('Erreur lors de la modification du message :', error);
@@ -171,7 +168,7 @@ onMounted(() => {
                 :title="message.content"
                 :subtitle="message?.author_email?.split('@')[0]"
                 :date="formatDate(message.created_at, false)"
-                :avatar="`/assets/avatars/${message?.author_avatar}` || '/assets/avatars/default_avatar.png'"
+                :avatar="message?.author_avatar ? `/assets/avatars/${message.author_avatar}` : '/assets/avatars/default_avatar.png'"
                 :pointer="false"
                 :isMessage="true"
                 :isOwner="userStore.id === message.user_id"
