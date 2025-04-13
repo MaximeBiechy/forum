@@ -152,7 +152,7 @@ onMounted(fetchMessages);
                 v-for="message in messages"
                 :key="message.id"
                 :title="message.content"
-                :subtitle="message.author_email?.split('@')[0]"
+                :subtitle="message?.author_email?.split('@')[0]"
                 :date="formatDate(message.created_at, false)"
                 :avatar="`/assets/avatars/${message.author_avatar}`"
                 :pointer="false"

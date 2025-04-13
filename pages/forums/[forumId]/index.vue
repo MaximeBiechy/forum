@@ -178,7 +178,7 @@ onMounted(fetchTopics);
         v-for="topic in topics"
         :key="topic.id"
         :title="topic.title"
-        :subtitle="`Dernier message par ${topic.last_message_author?.split('@')[0]}`"
+        :subtitle="`Dernier message par ${topic?.last_message_author?.split('@')[0]}`"
         :avatar="`/assets/avatars/${topic.author_avatar}`"
         :date="formatDate(topic.last_message_date, false)"
         :count="topic.message_count"
