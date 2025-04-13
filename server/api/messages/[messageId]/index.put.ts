@@ -1,4 +1,5 @@
 import {defineWrappedResponseHandler} from "~/server/utils/mysql";
+import {broadcastToAll} from "~/server/routes/_ws";
 
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
@@ -14,6 +15,11 @@ export default defineWrappedResponseHandler(async (event) => {
 
     try {
         await db.query('UPDATE messages SET content = ? WHERE id = ?', [content, messageId]);
+
+        broadcastToAll({
+            type: 'fetch-messages'
+        });
+
         return {success: true};
     } catch (error: any) {
         throw createError({

@@ -1,4 +1,5 @@
 import {defineWrappedResponseHandler} from "~/server/utils/mysql";
+import {broadcastToAll} from "~/server/routes/_ws";
 
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
@@ -23,6 +24,10 @@ export default defineWrappedResponseHandler(async (event) => {
         const topicId = message[0].topic_id;
 
         await db.query('DELETE FROM messages WHERE id = ?', [messageId]);
+
+        broadcastToAll({
+            type: 'fetch-messages'
+        });
 
         const [remainingMessages] = await db.query('SELECT COUNT(*) as count FROM messages WHERE topic_id = ?', [topicId]);
         if (remainingMessages[0].count === 0) {

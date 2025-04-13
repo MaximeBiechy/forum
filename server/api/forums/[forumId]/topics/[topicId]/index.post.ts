@@ -1,4 +1,6 @@
 import {defineWrappedResponseHandler} from "~/server/utils/mysql";
+import {broadcastToAll} from "~/server/routes/_ws";
+import {createError, readBody} from 'h3';
 
 export default defineWrappedResponseHandler(async (event) => {
     const db = event.context.mysql;
@@ -17,6 +19,10 @@ export default defineWrappedResponseHandler(async (event) => {
             `INSERT INTO messages (topic_id, user_id, content, created_at) VALUES (?, ?, ?, NOW())`,
             [topicId, body.user_id, body.content]
         );
+
+        broadcastToAll({
+            type: 'fetch-messages'
+        });
 
         return {success: true};
     } catch (error: any) {

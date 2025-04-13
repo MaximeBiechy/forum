@@ -20,6 +20,21 @@ const itemsPerPage = 20;
 const topicId = route.params.topicId;
 const forumId = route.params.forumId;
 
+const connectWS = () => {
+  const isSecure = location.protocol === "https:";
+  const wsUrl = (isSecure ? "wss://" : "ws://") + location.host + "/_ws";
+  const ws = new WebSocket(wsUrl);
+
+  ws.onmessage = (event) => {
+    console.log('WebSocket message received:', event.data);
+    const data = JSON.parse(event.data);
+    if (data.type === 'fetch-messages') {
+      fetchMessages();
+    }
+  };
+
+  return ws;
+};
 const fetchMessages = async () => {
   try {
     const response: any = await $fetch(`/api/forums/${forumId}/topics/${topicId}`, {
@@ -133,7 +148,10 @@ const editMessage = async (messageId: number, newContent: string) => {
   }
 };
 
-onMounted(fetchMessages);
+onMounted(() => {
+  fetchMessages();
+  connectWS();
+});
 </script>
 
 <template>
