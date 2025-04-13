@@ -78,7 +78,7 @@ const cancelEdit = () => {
 </script>
 
 <template>
-  <v-col cols="12" md="6" lg="12" class="card" :class="{ 'cursor-pointer': pointer }"
+  <v-col cols="12" class="card" :class="{ 'cursor-pointer': pointer }"
          @click="handleClick">
     <div v-if="isEditing">
       <v-text-field
