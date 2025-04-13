@@ -154,7 +154,7 @@ onMounted(fetchMessages);
                 :title="message.content"
                 :subtitle="message?.author_email?.split('@')[0]"
                 :date="formatDate(message.created_at, false)"
-                :avatar="`/assets/avatars/${message.author_avatar}`"
+                :avatar="`/assets/avatars/${message?.author_avatar}`"
                 :pointer="false"
                 :isMessage="true"
                 :isOwner="userStore.id === message.user_id"

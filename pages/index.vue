@@ -138,7 +138,7 @@ const createForum = async (forum: Forum) => {
         :key="forum.id"
         :title="forum.title"
         :subtitle="forum.user?.email?.split('@')[0]"
-        :avatar="`/assets/avatars/${forum.user.avatar_image_name}`"
+        :avatar="`/assets/avatars/${forum?.user?.avatar_image_name}`"
         :date="formatDate(forum.created_at, false)"
         :count="forum.topic_count"
         count-label=" sujet(s)"
