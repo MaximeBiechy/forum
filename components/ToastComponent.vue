@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineProps, watch} from 'vue';
+import {defineProps, ref, watch} from 'vue';
 
 const props = defineProps({
   message: {
@@ -56,7 +56,7 @@ watch(() => props.isVisible, (newVal) => {
   top: 8rem;
   right: 1rem;
   padding: 1rem;
-  width: 20%;
+  width: 20rem;
   border-radius: 1rem;
   z-index: 50;
 }
