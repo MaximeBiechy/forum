@@ -26,7 +26,6 @@ const connectWS = () => {
   const ws = new WebSocket(wsUrl);
 
   ws.onmessage = (event) => {
-    console.log('WebSocket message received:', event.data);
     const data = JSON.parse(event.data);
     if (data.type === 'fetch-messages') {
       fetchMessages();
@@ -172,7 +171,7 @@ onMounted(() => {
                 :title="message.content"
                 :subtitle="message?.author_email?.split('@')[0]"
                 :date="formatDate(message.created_at, false)"
-                :avatar="`/assets/avatars/${message?.author_avatar}`"
+                :avatar="`/assets/avatars/${message?.author_avatar}` || '/assets/avatars/default_avatar.png'"
                 :pointer="false"
                 :isMessage="true"
                 :isOwner="userStore.id === message.user_id"
