@@ -21,5 +21,5 @@
 - Page des topics d'un sujet
 ![img.png](images_readme/topic.png)
 
-- Page pour les admins avec la possibilité des modifier/supprimer/créer des forums
+- Page pour les admins avec la possibilité de modifier/supprimer/créer des forums
 ![img.png](images_readme/admin.png)
