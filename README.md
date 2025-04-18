@@ -3,6 +3,7 @@
 ## Informations utiles
 - Le .env est déjà configuré pour le projet. Pas besoin de le modifier.
 - L'url de l'interface est `http://localhost:3001/`
+- Un utilisateur admin est créer au premier lancement de l'application avec les identifiants suivants : nom d'utilisateur 'admin'; mot de passe 'admin'
 
 ## Installation
 - Docker : 
