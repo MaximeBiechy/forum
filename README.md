@@ -1,75 +1,25 @@
-# Nuxt Minimal Starter
+# Projet Nuxt.JS : Forum interactif
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Informations utiles
+- Le .env est déjà configuré pour le projet. Pas besoin de le modifier.
+- L'url de l'interface est `http://localhost:3001/`
 
-## Setup
+## Installation
+- Docker : 
+  - `docker-compose up` pour lancer le conteneur
 
-Make sure to install dependencies:
+## Rapport
+- Le rapport est disponible à la racine du projet sous le nom `rapport.pdf`.
 
-```bash
-# npm
-npm install
+## Interfaces
+- Page d'accueil avec un forum créé par l'utilisateur ben
+![img.png](images_readme/forums.png)
 
-# pnpm
-pnpm install
+- Page des sujets d'un forum avec le formulaire de création de sujet ouvert
+![img.png](images_readme/forum.png)
 
-# yarn
-yarn install
+- Page des topics d'un sujet
+![img.png](images_readme/topic.png)
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Page pour les admins avec la possibilité des modifier/supprimer/créer des forums
+![img.png](images_readme/admin.png)
